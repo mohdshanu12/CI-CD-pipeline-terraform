@@ -1,34 +1,37 @@
-name: Terraform Apply
+name: Terraform Destroy
 
 on:
-  push:
-    branches:
-           - main
-      # workflow_dispatch:
+#   push:
+#     branches:
+#       - main
+
+    workflow_dispatch:
+
+
 jobs:
-  apply:
+  destroy:
     runs-on: ubuntu-latest
-      
+     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-        
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
         with:
-
           Aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
           Aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
           AWS-Session-Token: ${{ secrets.AWS_SESSION_TOKEN}}
           aws-region: ap-south-1
 
+      # - name: Set up Terraform
+      #   uses: hashicorp/setup-terraform@v2
+      #   with:
+      #     terraform_version: 1.1.7
+
+
       - name: Terraform Init
         run: terraform init
-       
-       
-      - name: Terraform plan
-        run: terraform plan
         
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve 
